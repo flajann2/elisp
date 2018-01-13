@@ -1,16 +1,14 @@
-;;; smart-compile.el --- an interface to `compile'
+;;; schlau-compile.el --- an interface to `compile'
 
 ;; Copyright (C) 1998-2017  by Seiji Zenitani
 
-;; Author: Seiji Zenitani <zenitani@mac.com>
-;; Version: 20171105
+;; Author: Fred Mitchell <fred.mitchell@gmx.de>
 ;; Keywords: tools, unix
-;; Created: 1998-12-27
-;; Compatibility: Emacs 21 or later
-;; URL(en): https://github.com/zenitani/elisp/blob/master/smart-compile.el
-;; URL(jp): http://th.nao.ac.jp/MEMBER/zenitani/elisp-j.html#smart-compile
+;; Created: 2018-01-14
+;; Compatibility: Emacs 24 or later
+;; URL(en): https://github.com/zenitani/elisp/blob/master/schlau-compile.el
 
-;; Contributors: Sakito Hisakura, Greg Pfell
+;; Contributors: Seiji Zenitani, Sakito Hisakura, Greg Pfell
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -29,30 +27,29 @@
 
 ;;; Commentary:
 
-;; This package provides `smart-compile' function.
+;; This package provides `schlau-compile' function.
 ;; You can associate a particular file with a particular compile function,
-;; by editing `smart-compile-alist'.
+;; by editing `schlau-compile-alist'.
 ;;
 ;; To use this package, add these lines to your .emacs file:
-;;     (require 'smart-compile)
+;;     (require 'schlau-compile)
 ;;
 ;; Note that it requires emacs 21 or later.
 
 ;;; Code:
 
-(defgroup smart-compile nil
+(defgroup schlau-compile nil
   "An interface to `compile'."
   :group 'processes
-  :prefix "smart-compile")
+  :prefix "schlau-compile")
 
-(defcustom smart-compile-alist '(
+(defcustom schlau-compile-alist '(
   (emacs-lisp-mode    . (emacs-lisp-byte-compile))
   (html-mode          . (browse-url-of-buffer))
   (nxhtml-mode        . (browse-url-of-buffer))
   (html-helper-mode   . (browse-url-of-buffer))
   (octave-mode        . (run-octave))
   ("\\.c\\'"          . "gcc -O2 %f -lm -o %n")
-;;  ("\\.c\\'"          . "gcc -O2 %f -lm -o %n && ./%n")
   ("\\.[Cc]+[Pp]*\\'" . "g++ -O2 %f -lm -o %n")
   ("\\.cron\\(tab\\)?\\'" . "crontab %f")
   ("\\.[Ff]\\'"       . "gfortran %f -o %n")
@@ -68,8 +65,6 @@
   ("Rakefile\\'"      . "rake")
   ("\\.tex\\'"        . (tex-file))
   ("\\.texi\\'"       . "makeinfo %f")
-;;  ("\\.pl\\'"         . "perl -cw %f") ; syntax check
-;;  ("\\.rb\\'"         . "ruby -cw %f") ; syntax check
 )  "Alist of filename patterns vs corresponding format control strings.
 Each element looks like (REGEXP . STRING) or (MAJOR-MODE . STRING).
 Visiting a file whose name matches REGEXP specifies STRING as the
@@ -82,7 +77,7 @@ The following %-sequences will be replaced by:
   %n  file name without extension  ( netscape )
   %e  extension of file name       ( bin )
 
-  %o  value of `smart-compile-option-string'  ( \"user-defined\" ).
+  %o  value of `schlau-compile-option-string'  ( \"user-defined\" ).
 
 If the second item of the alist element is an emacs-lisp FUNCTION,
 evaluate FUNCTION instead of running a compilation command.
@@ -95,40 +90,40 @@ evaluate FUNCTION instead of running a compilation command.
             (choice
              (string :tag "Compilation command")
              (sexp :tag "Lisp expression"))))
-   :group 'smart-compile)
-(put 'smart-compile-alist 'risky-local-variable t)
+   :group 'schlau-compile)
+(put 'schlau-compile-alist 'risky-local-variable t)
 
-(defconst smart-compile-replace-alist '(
-  ("%F" . (buffer-file-name))
-  ("%f" . (file-name-nondirectory (buffer-file-name)))
-  ("%n" . (file-name-sans-extension
-           (file-name-nondirectory (buffer-file-name))))
-  ("%e" . (or (file-name-extension (buffer-file-name)) ""))
-  ("%o" . smart-compile-option-string)
-;;   ("%U" . (user-login-name))
-  )
-  "Alist of %-sequences for format control strings in `smart-compile-alist'.")
-(put 'smart-compile-replace-alist 'risky-local-variable t)
+(defconst schlau-compile-replace-alist '(
+                                        ("%F" . (buffer-file-name))
+                                        ("%G" . (git-root-path))                                                                                  
+                                        ("%f" . (file-name-nondirectory (buffer-file-name)))
+                                        ("%n" . (file-name-sans-extension
+                                                 (file-name-nondirectory (buffer-file-name))))
+                                        ("%e" . (or (file-name-extension (buffer-file-name)) ""))
+                                        ("%o" . schlau-compile-option-string)
+                                        )
+  "Alist of %-sequences for format control strings in `schlau-compile-alist'.")
+(put 'schlau-compile-replace-alist 'risky-local-variable t)
 
-(defvar smart-compile-check-makefile t)
-(make-variable-buffer-local 'smart-compile-check-makefile)
+(defvar schlau-compile-check-makefile t)
+(make-variable-buffer-local 'schlau-compile-check-makefile)
 
-(defcustom smart-compile-make-program "make "
+(defcustom schlau-compile-make-program "make "
   "The command by which to invoke the make program."
   :type 'string
-  :group 'smart-compile)
+  :group 'schlau-compile)
 
-(defcustom smart-compile-option-string ""
+(defcustom schlau-compile-option-string ""
   "The option string that replaces %o.  The default is empty."
   :type 'string
-  :group 'smart-compile)
+  :group 'schlau-compile)
 
 
 ;;;###autoload
-(defun smart-compile (&optional arg)
+(defun schlau-compile (&optional arg)
   "An interface to `compile'.
 It calls `compile' or other compile function,
-which is defined in `smart-compile-alist'."
+which is defined in `schlau-compile-alist'."
   (interactive "p")
   (let ((name (buffer-file-name))
         (not-yet t))
@@ -139,9 +134,9 @@ which is defined in `smart-compile-alist'."
     (cond
 
      ;; local command
-     ;; The prefix 4 (C-u M-x smart-compile) skips this section
+     ;; The prefix 4 (C-u M-x schlau-compile) skips this section
      ;; in order to re-generate the compile-command
-     ((and (not (= arg 4)) ; C-u M-x smart-compile
+     ((and (not (= arg 4)) ; C-u M-x schlau-compile
            (local-variable-p 'compile-command)
            compile-command)
       (call-interactively 'compile)
@@ -149,7 +144,7 @@ which is defined in `smart-compile-alist'."
       )
 
      ;; make?
-     ((and smart-compile-check-makefile
+     ((and schlau-compile-check-makefile
            (or (file-readable-p "Makefile")
                (file-readable-p "makefile")))
       (if (y-or-n-p "Makefile is found.  Try 'make'? ")
@@ -158,12 +153,12 @@ which is defined in `smart-compile-alist'."
             (call-interactively 'compile)
             (setq not-yet nil)
             )
-        (setq smart-compile-check-makefile nil)))
+        (setq schlau-compile-check-makefile nil)))
 
      ) ;; end of (cond ...)
 
     ;; compile
-    (let( (alist smart-compile-alist) 
+    (let( (alist schlau-compile-alist) 
           (case-fold-search nil)
           (function nil) )
       (while (and alist not-yet)
@@ -178,7 +173,7 @@ which is defined in `smart-compile-alist'."
               (if (stringp function)
                   (progn
                     (set (make-local-variable 'compile-command)
-                         (smart-compile-string function))
+                         (schlau-compile-string function))
                     (call-interactively 'compile)
                     )
                 (if (listp function)
@@ -211,11 +206,11 @@ which is defined in `smart-compile-alist'."
 
     ))
 
-(defun smart-compile-string (format-string)
+(defun schlau-compile-string (format-string)
   "Document forthcoming..."
   (if (and (boundp 'buffer-file-name)
            (stringp buffer-file-name))
-      (let ((rlist smart-compile-replace-alist)
+      (let ((rlist schlau-compile-replace-alist)
             (case-fold-search nil))
         (while rlist
           (while (string-match (caar rlist) format-string)
@@ -227,6 +222,20 @@ which is defined in `smart-compile-alist'."
         ))
   format-string)
 
-(provide 'smart-compile)
+(defun project-path (path key)
+  "traverse up the directory path for key,
+  and either return the path to key or nil."
+  (print path #'external-debugging-output)
+  (if (file-exists-p (concat path "/" key))
+      path
+    (if (string= path "/")
+        nil
+      (project-path (file-name-directory
+                     (replace-regexp-in-string "\\\/$" ""  path)) key)
+    )))
 
-;;; smart-compile.el ends here
+(defun git-root-path ()
+  (project-path buffer-file-name ".git"))
+
+(provide 'schlau-compile)
+;;; schlau-compile.el ends here
