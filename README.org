@@ -1,0 +1,13 @@
+* Emacs Extensions
+** Synopsis
+   Basically, I want to develop extensions for my favorite editing tool, and
+   so this is it. All is avaiable on the MELPA repo.
+
+** Author
+   Fred Mitchell
+
+** Acknowledgements
+   Some of what we have here are forks from other projects, and others
+   will be my own original works (I don't have any yet!) In each
+   extension, the appropriate acknowledgements are given.
+
