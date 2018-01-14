@@ -1,4 +1,11 @@
-* Emacs Extensions
+* Emacs Extensions                                                 :TOC_5_gh:
+  - [[#synopsis][Synopsis]]
+  - [[#author][Author]]
+  - [[#acknowledgements][Acknowledgements]]
+  - [[#extensions][Extensions]]
+    - [[#schlau-compile][schlau-compile]]
+      - [[#string---macos][String %- Macos]]
+
 ** Synopsis
    Basically, I want to develop extensions for my favorite editing tool, and
    so this is it. All is avaiable on the MELPA repo.
@@ -12,5 +19,14 @@
    I only document the extensions that either I have created or
    modified in this fork.
 *** schlau-compile
-    Documentation is coming.
+**** String %- Macos
+
+| Macro | Description                             | Example Results                          |
+|-------+-----------------------------------------+------------------------------------------|
+| %F    | absolute pathname                       | ( /devopment/your_project/src/main.cpp ) |
+| %f    | file name without directory             | ( main.cpp )                             |
+| %n    | file name without extension             | ( main )                                 |
+| %e    | extension of file name                  | ( cpp )                                  |
+| %G    | root path of git project                | ( /devopment/your_project/ )             |
+| %o    | value of `schlau-compile-option-string' | ( \"user-defined\" ).                    |
 
