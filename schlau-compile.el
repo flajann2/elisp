@@ -1,12 +1,13 @@
 ;;; schlau-compile.el --- an interface to `compile'
 
 ;; Copyright (C) 1998-2017  by Seiji Zenitani
+;; Copyright (C) 2018 by Fred Mitchell
 
 ;; Author: Fred Mitchell <fred.mitchell@gmx.de>
-;; Keywords: tools, unix
+;; Keywords: tools, unix, git
 ;; Created: 2018-01-14
 ;; Compatibility: Emacs 24 or later
-;; URL(en): https://github.com/zenitani/elisp/blob/master/schlau-compile.el
+;; URL(en): https://github.com/flajann2/elisp/blob/master/schlau-compile.el
 
 ;; Contributors: Seiji Zenitani, Sakito Hisakura, Greg Pfell
 
@@ -27,7 +28,9 @@
 
 ;;; Commentary:
 
-;; This package provides `schlau-compile' function.
+;; This package provides `schlau-compile' function. It was forked from
+;; 'smart-compile'.
+;;
 ;; You can associate a particular file with a particular compile function,
 ;; by editing `schlau-compile-alist'.
 ;;
@@ -72,10 +75,11 @@ format control string.  Instead of REGEXP, MAJOR-MODE can also be used.
 The compilation command will be generated from STRING.
 The following %-sequences will be replaced by:
 
-  %F  absolute pathname            ( /usr/local/bin/netscape.bin )
-  %f  file name without directory  ( netscape.bin )
-  %n  file name without extension  ( netscape )
-  %e  extension of file name       ( bin )
+  %F  absolute pathname            ( /devopment/your_project/src/main.cpp )
+  %f  file name without directory  ( main.cpp )
+  %n  file name without extension  ( main )
+  %e  extension of file name       ( cpp )
+  %G  root path of git project     ( /devopment/your_project/ )
 
   %o  value of `schlau-compile-option-string'  ( \"user-defined\" ).
 
@@ -235,6 +239,8 @@ which is defined in `schlau-compile-alist'."
     )))
 
 (defun git-root-path ()
+  "find the root git path of the current
+  project (assuming you are using git)"
   (project-path buffer-file-name ".git"))
 
 (provide 'schlau-compile)
