@@ -19,8 +19,6 @@
    will be my own original works (I don't have any yet!) In each
    extension, the appropriate acknowledgements are given.
 ** Extensions
-   I only document the extensions that either I have created or
-   modified in this fork.
 *** schlau-compile
 **** String %- Macos
      Alist of filename patterns vs corresponding format control strings.
