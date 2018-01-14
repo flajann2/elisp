@@ -1,0 +1,62 @@
+* Emacs Extensions                                                 :TOC_5_gh:
+  - [[#synopsis][Synopsis]]
+  - [[#author][Author]]
+  - [[#acknowledgements][Acknowledgements]]
+  - [[#extensions][Extensions]]
+    - [[#schlau-compile][schlau-compile]]
+      - [[#string---macos][String %- Macos]]
+      - [[#setup-example-for-your-emacs-file][Setup example for your .emacs file]]
+
+** Synopsis
+   Basically, I want to develop extensions for my favorite editing tool, and
+   so this is it. All is avaiable on the MELPA repo.
+
+
+** Author
+   Fred Mitchell
+** Acknowledgements
+   Some of what we have here are forks from other projects, and others
+   will be my own original works (I don't have any yet!) In each
+   extension, the appropriate acknowledgements are given.
+** Extensions
+   I only document the extensions that either I have created or
+   modified in this fork.
+*** schlau-compile
+**** String %- Macos
+     Alist of filename patterns vs corresponding format control strings.
+     Each element looks like (REGEXP . STRING) or (MAJOR-MODE . STRING).
+     Visiting a file whose name matches REGEXP specifies STRING as the
+     format control string.  Instead of REGEXP, MAJOR-MODE can also be used.
+     The compilation command will be generated from STRING.
+     The following %-sequences will be replaced by:
+
+     | Macro | Description                             | Example Results                      |
+     |-------+-----------------------------------------+--------------------------------------|
+     | %F    | absolute pathname                       | /devopment/your_project/src/main.cpp |
+     | %f    | file name without directory             | main.cpp                             |
+     | %n    | file name without extension             | main                                 |
+     | %e    | extension of file name                  | cpp                                  |
+     | %G    | root path of git project                | /devopment/your_project/             |
+     | %o    | value of `schlau-compile-option-string' | "user-defined"                       |
+
+**** Setup example for your .emacs file
+     Here we show a custom example of doing a cmake c++ project compile,
+     and one for Rust as well. Note the use of %G in the case of cmake.
+
+     #+begin_src lisp
+     (setq schlau-compile-alist
+      (append
+       ;; compile C++
+       '((c++-mode . "cd %G && cmake . && make -k -j8"))
+
+       ;; compile Rust
+       '((rust-mode . "RUST_BACKTRACE=1 cargo build"))
+       ))
+
+     (global-set-key [f5] 'schlau-compile)
+     (global-set-key [f6] 'recompile)
+     (global-set-key [C-f6] 'kill-compilation)
+     #+end_src
+
+     And you will also note the last 3 lines setting up a key mapping,
+     which you are of course free to change to your own liking.
