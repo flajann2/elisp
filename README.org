@@ -30,14 +30,14 @@
      The compilation command will be generated from STRING.
      The following %-sequences will be replaced by:
 
-     | Macro | Description                             | Example Results                      |
-     |-------+-----------------------------------------+--------------------------------------|
-     | %F    | absolute pathname                       | /devopment/your_project/src/main.cpp |
-     | %f    | file name without directory             | main.cpp                             |
-     | %n    | file name without extension             | main                                 |
-     | %e    | extension of file name                  | cpp                                  |
-     | %G    | root path of git project                | /devopment/your_project/             |
-     | %o    | value of `schlau-compile-option-string' | "user-defined"                       |
+     | Macro | Description                             | Example Results             |
+     |-------+-----------------------------------------+-----------------------------|
+     | %F    | absolute pathname                       | ~/your_project/src/main.cpp |
+     | %f    | file name without directory             | main.cpp                    |
+     | %n    | file name without extension             | main                        |
+     | %e    | extension of file name                  | cpp                         |
+     | %G    | root path of git project                | ~/your_project/             |
+     | %o    | value of `schlau-compile-option-string' | "user-defined"              |
 
 **** Setup example for your .emacs file
      Here we show a custom example of doing a cmake c++ project compile,

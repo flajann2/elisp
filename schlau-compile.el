@@ -1,4 +1,6 @@
 ;;; schlau-compile.el --- an interface to `compile'
+;; URL: https://github.com/flajann2/elisp#schlau-compile
+;; Version: 2018011401
 
 ;; Copyright (C) 1998-2017  by Seiji Zenitani
 ;; Copyright (C) 2018 by Fred Mitchell
@@ -99,7 +101,7 @@ evaluate FUNCTION instead of running a compilation command.
 
 (defconst schlau-compile-replace-alist '(
                                         ("%F" . (buffer-file-name))
-                                        ("%G" . (git-root-path))                                                                                  
+                                        ("%G" . (schlau-compile-git-root-path))                                                                                  
                                         ("%f" . (file-name-nondirectory (buffer-file-name)))
                                         ("%n" . (file-name-sans-extension
                                                  (file-name-nondirectory (buffer-file-name))))
@@ -226,7 +228,7 @@ which is defined in `schlau-compile-alist'."
         ))
   format-string)
 
-(defun project-path (path key)
+(defun schlau-compile-project-path (path key)
   "traverse up the directory path for key,
   and either return the path to key or nil."
   (print path #'external-debugging-output)
@@ -234,14 +236,14 @@ which is defined in `schlau-compile-alist'."
       path
     (if (string= path "/")
         nil
-      (project-path (file-name-directory
+      (schlau-compile-project-path (file-name-directory
                      (replace-regexp-in-string "\\\/$" ""  path)) key)
     )))
 
-(defun git-root-path ()
+(defun schlau-compile-git-root-path ()
   "find the root git path of the current
   project (assuming you are using git)"
-  (project-path buffer-file-name ".git"))
+  (schlau-compile-project-path buffer-file-name ".git"))
 
 (provide 'schlau-compile)
 ;;; schlau-compile.el ends here
