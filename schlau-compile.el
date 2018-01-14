@@ -39,7 +39,9 @@
 ;; To use this package, add these lines to your .emacs file:
 ;;     (require 'schlau-compile)
 ;;
-;; Note that it requires emacs 21 or later.
+;; Note that it requires emacs 24 or later.
+;;
+;; https://github.com/flajann2/elisp/blob/master/README.org
 
 ;;; Code:
 
