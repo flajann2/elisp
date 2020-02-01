@@ -1,26 +1,24 @@
-* Emacs Extensions                                                 :TOC_5_gh:
+* schlau-compile                                                   :TOC_5_gh:
   - [[#synopsis][Synopsis]]
   - [[#author][Author]]
   - [[#acknowledgements][Acknowledgements]]
-  - [[#extensions][Extensions]]
-    - [[#schlau-compile][schlau-compile]]
-      - [[#string---macos][String %- Macos]]
-      - [[#setup-example-for-your-emacs-file][Setup example for your .emacs file]]
+  - [[#documentation][Documentation]]
+    - [[#string---macos][String %- Macos]]
+    - [[#setup-example-for-your-emacs-file][Setup example for your .emacs file]]
 
 ** Synopsis
-   Basically, I want to develop extensions for my favorite editing tool, and
-   so this is it. All is avaiable on the MELPA repo.
-
+   A utility to allow you to configure
+   compilation for any git project.
 
 ** Author
    Fred Mitchell
+
 ** Acknowledgements
-   Some of what we have here are forks from other projects, and others
-   will be my own original works (I don't have any yet!) In each
-   extension, the appropriate acknowledgements are given.
-** Extensions
-*** schlau-compile
-**** String %- Macos
+   Forked from the original "Smart Compile" by Seiji Zenitani 
+   at https://github.com/zenitani/elisp
+
+** Documentation
+*** String %- Macos
      Alist of filename patterns vs corresponding format control strings.
      Each element looks like (REGEXP . STRING) or (MAJOR-MODE . STRING).
      Visiting a file whose name matches REGEXP specifies STRING as the
@@ -37,7 +35,7 @@
      | %G    | root path of git project                | ~/your_project/             |
      | %o    | value of `schlau-compile-option-string' | "user-defined"              |
 
-**** Setup example for your .emacs file
+*** Setup example for your .emacs file
      Here we show a custom example of doing a cmake c++ project compile,
      and one for Rust as well. Note the use of %G in the case of cmake.
 
