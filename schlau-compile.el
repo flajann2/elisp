@@ -1,9 +1,9 @@
 ;;; schlau-compile.el --- an interface to `compile'
 ;; URL: https://github.com/flajann2/elisp#schlau-compile
-;; Version: 2018011401
+;; Version: 20200201
 
-;; Copyright (C) 1998-2017  by Seiji Zenitani
-;; Copyright (C) 2018 by Fred Mitchell
+;; Copyright (C) 2018-2020 by Fred Mitchell
+;; Copyright (C) 1998-2017 by Seiji Zenitani
 
 ;; Author: Fred Mitchell <fred.mitchell@gmx.de>
 ;; Keywords: tools, unix, git
@@ -13,10 +13,15 @@
 
 ;; Contributors: Seiji Zenitani, Sakito Hisakura, Greg Pfell
 
+;; Please refer to the README.org for the actual documentation.
+
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
+
+;; The enhancements made by Fred Mitchell are released under the
+;; MIT license..
 
 ;; This file is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,10 +32,11 @@
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
+;; See also the MIT license.
 
 ;;; Commentary:
 
-;; This package provides `schlau-compile' function. It was forked from
+;; This package provides `schlau-compile' function. It was derived from
 ;; 'smart-compile'.
 ;;
 ;; You can associate a particular file with a particular compile function,
